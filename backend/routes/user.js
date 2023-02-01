@@ -1,14 +1,14 @@
-const express = require("express");
+const express = require('express');
 
-const userRoutes = express.Router();
+const router = express.Router();
 
 // TODO: require db connection
 
-userRoutes.route("/user").post(function (req, res) {
-    res.send("post user");
+router.route('/').post(function (req, res) {
+    res.send(req.params);
 });
   
-userRoutes.route("/user/:userId")
+router.route('/:userId')
 .get(function (req, res) {
     res.send(req.params);
 })
@@ -19,4 +19,4 @@ userRoutes.route("/user/:userId")
     res.send(req.params);
 });
 
-module.exports = userRoutes;
+module.exports = router;

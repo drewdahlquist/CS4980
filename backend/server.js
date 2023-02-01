@@ -1,15 +1,18 @@
 require('dotenv').config()
 
 const express = require('express')
-const cors = require("cors");
+const cors = require('cors');
 
 const app = express()
 const port = 5001;
 
 app.use(cors());
 app.use(express.json());
-app.use(require("./routes/user.js"));
-app.use(require("./routes/task.js"));
+
+const user = require('./routes/user.js');
+const task = require('./routes/task.js');
+app.use('/user', user);
+app.use('/user/:id/task', task);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');

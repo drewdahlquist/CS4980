@@ -1,14 +1,14 @@
-const express = require("express");
+const express = require('express');
 
-const taskRoutes = express.Router();
+const router = express.Router();
 
 // TODO: require db connection
 
-taskRoutes.route("/user/:userId/task").post(function (req, res) {
-    res.send("post task:"+req.params.taskId+" for user:"+req.params.userId);
+router.route('/').post(function (req, res) {
+    res.send(req.params);
 });
   
-taskRoutes.route("/user/:userId/task/:taskId")
+router.route('/:taskId')
 .get(function (req, res) {
     res.send(req.params);
 })
@@ -19,4 +19,4 @@ taskRoutes.route("/user/:userId/task/:taskId")
     res.send(req.params);
 });
 
-module.exports = taskRoutes;
+module.exports = router;
