@@ -8,16 +8,15 @@ userRoutes.route("/user").post(function (req, res) {
     res.send("post user");
 });
   
-userRoutes.route("/user/:userId").get(function (req, res) {
-    res.send("get user:"+req.params.userId);
-});
-
-userRoutes.route("/user/:userId").put(function (req, res) {
-    res.send("put user:"+req.params.userId);
-});
-  
-userRoutes.route("/user/:userId").delete(function (req, res) {
-    res.send("delete user:"+req.params.userId);
+userRoutes.route("/user/:userId")
+.get(function (req, res) {
+    res.send(req.params);
+})
+.put(function (req, res) {
+    res.send(req.params);
+})
+.delete(function (req, res) {
+    res.send(req.params);
 });
 
 module.exports = userRoutes;
