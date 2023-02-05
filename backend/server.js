@@ -1,23 +1,24 @@
-require('dotenv').config()
+require("dotenv").config();
 
-const express = require('express')
-const cors = require('cors');
+const express = require("express");
+const cors = require("cors");
+const port = process.env.API_PORT || 5001;
+const userRouter = require("./routes/user.js");
+const taskRouter = require("./routes/task.js");
 
-const app = express()
-const port = 5001;
+const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use("/user", userRouter);
+app.use("/user/:id/task", taskRouter);
 
-const user = require('./routes/user.js');
-const task = require('./routes/task.js');
-app.use('/user', user);
-app.use('/user/:id/task', task);
+// Easy check if server up
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-})
-
+// Start server
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-})
+  console.log(`API server is listening on port ${port}`);
+});
