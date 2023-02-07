@@ -5,11 +5,11 @@ import { v4 as uuid } from 'uuid';
 
 
 const itemsFromBackend = [
-  { id: uuid(), content: "First task" },
-  { id: uuid(), content: "Second task" },
-  { id: uuid(), content: "Third task" },
-  { id: uuid(), content: "Fourth task" },
-  { id: uuid(), content: "Fifth task" }
+  { id: uuid(), content: "First task", date: new Date().toLocaleDateString("en-US") },
+  { id: uuid(), content: "Second task", date: new Date().toLocaleDateString("en-US") },
+  { id: uuid(), content: "Third task", date: new Date().toLocaleDateString("en-US") },
+  { id: uuid(), content: "Fourth task", date: new Date().toLocaleDateString("en-US") },
+  { id: uuid(), content: "Fifth task", date: new Date().toLocaleDateString("en-US") }
 ];
 
 const columnsFromBackend = {
@@ -127,7 +127,9 @@ function KanbanBoard() {
                                       ...provided.draggableProps.style
                                     }}
                                   >
-                                    {item.content}
+                                    <div>{item.content}</div>
+                                    <div>Due: {item.date}</div>
+                                    
                                   </div>
                                 );
                               }}
