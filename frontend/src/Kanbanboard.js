@@ -2,14 +2,15 @@
 import React, { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { v4 as uuid } from 'uuid';
+import Axios from 'axios'
 
 
 const itemsFromBackend = [
-  { id: uuid(), content: "First task" },
-  { id: uuid(), content: "Second task" },
-  { id: uuid(), content: "Third task" },
-  { id: uuid(), content: "Fourth task" },
-  { id: uuid(), content: "Fifth task" }
+  { id: uuid(), content: "First task", date: new Date().toLocaleDateString("en-US") },
+  { id: uuid(), content: "Second task", date: new Date().toLocaleDateString("en-US") },
+  { id: uuid(), content: "Third task", date: new Date().toLocaleDateString("en-US") },
+  { id: uuid(), content: "Fourth task", date: new Date().toLocaleDateString("en-US") },
+  { id: uuid(), content: "Fifth task", date: new Date().toLocaleDateString("en-US") }
 ];
 
 const columnsFromBackend = {
@@ -69,6 +70,13 @@ const onDragEnd = (result, columns, setColumns) => {
 };
 
 function KanbanBoard() {
+
+  //basic http GET request to root at backend
+  Axios.get('http://localhost:5001')
+  .then(response=>{console.log(response.data)})
+  .catch(error=>{console.log(error)});
+ 
+
   const [columns, setColumns] = useState(columnsFromBackend);
   return (
     <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
@@ -127,7 +135,9 @@ function KanbanBoard() {
                                       ...provided.draggableProps.style
                                     }}
                                   >
-                                    {item.content}
+                                    <div>{item.content}</div>
+                                    <div>Due: {item.date}</div>
+                                    
                                   </div>
                                 );
                               }}
