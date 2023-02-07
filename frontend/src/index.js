@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import ResponsiveAppBar from './Appbar';
 import './index.css';
+import KanbanBoard from './Kanbanboard';
 
   
   class Mainpage extends React.Component {
@@ -10,6 +11,7 @@ import './index.css';
       return (
         <div>
           <ResponsiveAppBar/>
+          <KanbanBoard />
         </div>
       );
     }
