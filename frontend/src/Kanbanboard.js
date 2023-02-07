@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { v4 as uuid } from 'uuid';
+import Axios from 'axios'
 
 
 const itemsFromBackend = [
@@ -69,6 +70,13 @@ const onDragEnd = (result, columns, setColumns) => {
 };
 
 function KanbanBoard() {
+
+  //basic http GET request to root at backend
+  Axios.get('http://localhost:5001')
+  .then(response=>{console.log(response.data)})
+  .catch(error=>{console.log(error)});
+ 
+
   const [columns, setColumns] = useState(columnsFromBackend);
   return (
     <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
