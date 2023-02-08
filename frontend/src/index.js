@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client';
 import ResponsiveAppBar from './Appbar';
 import './index.css';
 import KanbanBoard from './Kanbanboard';
+import AddTaskButton from './AddTaskButton';
 
 
   
@@ -13,6 +14,7 @@ import KanbanBoard from './Kanbanboard';
       return (
         <div>
           <ResponsiveAppBar/>
+          <AddTaskButton/>
           <KanbanBoard />
         </div>
       );

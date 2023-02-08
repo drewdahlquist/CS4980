@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 import Axios from 'axios'
 
 
-const itemsFromBackend = [
+export var itemsFromBackend = [
   { id: uuid(), content: "First task", date: new Date().toLocaleDateString("en-US") },
   { id: uuid(), content: "Second task", date: new Date().toLocaleDateString("en-US") },
   { id: uuid(), content: "Third task", date: new Date().toLocaleDateString("en-US") },
