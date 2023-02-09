@@ -8,7 +8,7 @@ router
   // create task
   .post(function (req, res) {
     const text =
-      "INSERT INTO tasks (user_id, name, desc) VALUES ($1, $2, $3) RETURNING *";
+      "INSERT INTO tasks (user_id, name, description) VALUES ($1, $2, $3) RETURNING *";
     const userId = req.config.userId;
     const { name, desc } = req.body;
 
@@ -50,7 +50,7 @@ router
   // update task by id
   .put(function (req, res) {
     const text =
-      "UPDATE tasks SET (name, desc) = ($1, $2) WHERE id = $3 RETURNING *";
+      "UPDATE tasks SET (name, description) = ($1, $2) WHERE id = $3 RETURNING *";
     const taskId = req.params.taskId;
     const { name, desc } = req.body;
 

@@ -9,7 +9,7 @@ CREATE TABLE tasks (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id),
   name VARCHAR(255) NOT NULL,
-  desc TEXT,
+  description TEXT,
   due_date DATE,
   created_at TIMESTAMP DEFAULT NOW()
 );
