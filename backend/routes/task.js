@@ -10,9 +10,9 @@ router
     const text =
       "INSERT INTO tasks (user_id, name, description) VALUES ($1, $2, $3) RETURNING *";
     const userId = req.config.userId;
-    const { name, description } = req.body;
+    const { name, desc } = req.body;
 
-    pool.query(text, [userId, name, description], (err, result) => {
+    pool.query(text, [userId, name, desc], (err, result) => {
       if (err) {
         res.status(400).send(err);
       } else {
@@ -52,9 +52,9 @@ router
     const text =
       "UPDATE tasks SET (name, description) = ($1, $2) WHERE id = $3 RETURNING *";
     const taskId = req.params.taskId;
-    const { name, description } = req.body;
+    const { name, desc } = req.body;
 
-    pool.query(text, [name, description, taskId], (err, result) => {
+    pool.query(text, [name, desc, taskId], (err, result) => {
       if (err) {
         res.status(400).send(err);
       } else {
