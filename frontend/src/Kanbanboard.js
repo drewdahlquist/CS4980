@@ -116,6 +116,7 @@ function KanbanBoard() {
                               key={item.id}
                               draggableId={item.id}
                               index={index}
+                              
                             >
                               {(provided, snapshot) => {
                                 return (
@@ -129,9 +130,10 @@ function KanbanBoard() {
                                       margin: "0 0 8px 0",
                                       minHeight: "50px",
                                       backgroundColor: snapshot.isDragging
-                                        ? "#263B4A"
-                                        : "#456C86",
+                                        ? "#2E3B55"
+                                        : "#2E3B55",
                                       color: "white",
+                                      borderRadius:"15px",
                                       ...provided.draggableProps.style
                                     }}
                                   >
