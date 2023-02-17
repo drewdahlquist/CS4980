@@ -6,8 +6,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-//import KanbanBoard from './Kanbanboard';
-//import { itemsFromBackend } from './Kanbanboard';
+import { v4 as uuid } from 'uuid';
+import { itemsFromBackend } from './Kanbanboard';
 
 
 
@@ -23,6 +23,8 @@ export default function AddTaskButton() {
     };
 
     const handleCreateTask = (event) => {
+        itemsFromBackend.push( { id: uuid(), content: "new task", date: new Date().toLocaleDateString("en-US") } );
+        console.log(itemsFromBackend);
         handleClose();
     };
   
