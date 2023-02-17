@@ -8,11 +8,12 @@ router
   // create task
   .post(function (req, res) {
     const text =
-      "INSERT INTO tasks (user_id, name, description) VALUES ($1, $2, $3) RETURNING *";
+      "INSERT INTO tasks (user_id, name, description, due_date, status, priority, course, type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *";
     const userId = req.config.userId;
-    const { name, desc } = req.body;
+    const { name, description, due_date, status, priority, course, type } = req.body;
+    const values = [userId, name, description, due_date, status, priority, course, type];
 
-    pool.query(text, [userId, name, desc], (err, result) => {
+    pool.query(text, [...values], (err, result) => {
       if (err) {
         res.status(400).send(err);
       } else {
@@ -22,8 +23,10 @@ router
   })
   // list tasks
   .get(function (req, res) {
-    const text = "SELECT * FROM tasks";
-    pool.query(text, (err, result) => {
+    const text = "SELECT * FROM tasks WHERE user_id = $1";
+    const userId = req.config.userId;
+
+    pool.query(text, [userId], (err, result) => {
       if (err) {
         res.status(400).send(err);
       } else {
@@ -36,10 +39,11 @@ router
   .route("/:taskId")
   // get task by id
   .get(function (req, res) {
-    const text = "SELECT * FROM tasks WHERE id = $1";
+    const text = "SELECT * FROM tasks WHERE id = $1 AND user_id = $2";
     const taskId = req.params.taskId;
+    const userId = req.config.userId;
 
-    pool.query(text, [taskId], (err, result) => {
+    pool.query(text, [taskId, userId], (err, result) => {
       if (err) {
         res.status(400).send(err);
       } else {
@@ -50,11 +54,12 @@ router
   // update task by id
   .put(function (req, res) {
     const text =
-      "UPDATE tasks SET (name, description) = ($1, $2) WHERE id = $3 RETURNING *";
-    const taskId = req.params.taskId;
-    const { name, desc } = req.body;
+      "UPDATE tasks SET (name, description) = ($1, $2) WHERE id = $3 AND user_id = $4 RETURNING *";
+      const { name, description } = req.body;
+      const taskId = req.params.taskId;
+      const userId = req.config.userId;
 
-    pool.query(text, [name, desc, taskId], (err, result) => {
+    pool.query(text, [name, description, taskId, userId], (err, result) => {
       if (err) {
         res.status(400).send(err);
       } else {
@@ -64,10 +69,11 @@ router
   })
   // delete task by id
   .delete(function (req, res) {
-    const text = "DELETE FROM tasks WHERE id = $1";
+    const text = "DELETE FROM tasks WHERE id = $1 AND user_id = $2";
     const taskId = req.params.taskId;
+    const userId = req.config.userId;
 
-    pool.query(text, [taskId], (err, result) => {
+    pool.query(text, [taskId, userId], (err, result) => {
       if (err) {
         res.status(400).send(err);
       } else {

@@ -7,10 +7,12 @@ router
   .route("/")
   // create user
   .post(function (req, res) {
-    const text = "INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *";
-    const { name, email } = req.body;
+    const text =
+      "INSERT INTO users (username, email, password, first_name, last_name) VALUES ($1, $2, $3, $4, $5) RETURNING *";
+    const { username, email, password, first_name, last_name } = req.body;
+    const values = [username, email, password, first_name, last_name];
 
-    pool.query(text, [name, email], (err, result) => {
+    pool.query(text, [...values], (err, result) => {
       if (err) {
         res.status(400).send(err);
       } else {
@@ -21,6 +23,7 @@ router
   // list users
   .get(function (req, res) {
     const text = "SELECT * FROM users";
+    
     pool.query(text, (err, result) => {
       if (err) {
         res.status(400).send(err);
@@ -50,9 +53,9 @@ router
     const text =
       "UPDATE users SET (name, email) = ($1, $2) WHERE id = $3 RETURNING *";
     const userId = req.params.userId;
-    const { name, email } = req.body;
+    const { username, email } = req.body;
 
-    pool.query(text, [name, email, userId], (err, result) => {
+    pool.query(text, [username, email, userId], (err, result) => {
       if (err) {
         res.status(400).send(err);
       } else {
