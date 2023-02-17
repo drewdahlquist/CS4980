@@ -35,10 +35,9 @@ router
   // get user by id
   .get(function (req, res) {
     const text = "SELECT * FROM users WHERE id = $1";
-    const id = req.params.userId;
-    console.log(req.query);
+    const userId = req.params.userId;
 
-    pool.query(text, [id], (err, result) => {
+    pool.query(text, [userId], (err, result) => {
       if (err) {
         res.status(400).send(err);
       } else {
@@ -48,11 +47,10 @@ router
   })
   // update user by id
   .put(function (req, res) {
-    console.log(req.body);
-
     const text =
       "UPDATE users SET (name, email) = ($1, $2) WHERE id = $3 RETURNING *";
-    const { name, email, userId } = [req.body, req.params.userId];
+    const userId = req.params.userId;
+    const { name, email } = req.body;
 
     pool.query(text, [name, email, userId], (err, result) => {
       if (err) {
@@ -64,12 +62,10 @@ router
   })
   // delete user by id
   .delete(function (req, res) {
-    console.log(req.body);
-
     const text = "DELETE FROM users WHERE id = $1";
-    const values = [req.params.userId];
+    const userId = req.params.userId;
 
-    pool.query(text, values, (err, result) => {
+    pool.query(text, [userId], (err, result) => {
       if (err) {
         res.status(400).send(err);
       } else {

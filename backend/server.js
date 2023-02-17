@@ -11,7 +11,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/user", userRouter);
-app.use("/user/:id/task", taskRouter);
+app.use(
+  "/user/:userId/task",
+  (req, res, next) => {
+    req.config = {
+      userId: req.params.userId,
+    };
+    next();
+  },
+  taskRouter
+);
 
 // Easy check if server up
 app.get("/", (req, res) => {
