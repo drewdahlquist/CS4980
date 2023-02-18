@@ -3,6 +3,53 @@ import React, { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { v4 as uuid } from 'uuid';
 import Axios from 'axios'
+import PropTypes from 'prop-types';
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Typography from '@mui/material/Typography';
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialogContent-root': {
+    padding: theme.spacing(2),
+  },
+  '& .MuiDialogActions-root': {
+    padding: theme.spacing(1),
+  },
+}));
+
+function BootstrapDialogTitle(props) {
+  const { children, onClose, ...other } = props;
+
+  return (
+    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+      {children}
+      {onClose ? (
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </DialogTitle>
+  );
+}
+
+BootstrapDialogTitle.propTypes = {
+  children: PropTypes.node,
+  onClose: PropTypes.func.isRequired,
+};
 
 
 export var itemsFromBackend = [
@@ -71,6 +118,15 @@ const onDragEnd = (result, columns, setColumns) => {
 
 function KanbanBoard() {
 
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   //basic http GET request to root at backend
   Axios.get('http://localhost:5001')
   .then(response=>{console.log(response.data)})
@@ -118,6 +174,7 @@ function KanbanBoard() {
                               index={index}
                               
                             >
+                              
                               {(provided, snapshot) => {
                                 return (
                                   <div
@@ -136,11 +193,14 @@ function KanbanBoard() {
                                       borderRadius:"15px",
                                       ...provided.draggableProps.style
                                     }}
+                                    onClick={handleClickOpen}
                                   >
+                              
                                     <div>{item.content}</div>
                                     <div>Due: {item.date}</div>
                                     
                                   </div>
+
                                 );
                               }}
                             </Draggable>
@@ -152,6 +212,30 @@ function KanbanBoard() {
                   }}
                 </Droppable>
               </div>
+              <BootstrapDialog
+                onClose={handleClose}
+                aria-labelledby="customized-dialog-title"
+                open={open}
+                style={{
+                  opacity:0.7
+                }}
+              >
+                <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
+                  Modal title
+                </BootstrapDialogTitle>
+                <DialogContent dividers>
+                  <Typography gutterBottom>
+                    Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
+                    dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
+                    consectetur ac, vestibulum at eros.
+                  </Typography>
+                </DialogContent>
+                <DialogActions>
+                  <Button autoFocus onClick={handleClose}>
+                    close
+                  </Button>
+                </DialogActions>
+              </BootstrapDialog>
             </div>
           );
         })}
