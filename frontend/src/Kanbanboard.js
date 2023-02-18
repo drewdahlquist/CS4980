@@ -5,32 +5,44 @@ import { v4 as uuid } from 'uuid';
 import Axios from 'axios'
 
 
-export var itemsFromBackend = [
-  { id: uuid(), content: "First task", date: new Date().toLocaleDateString("en-US") },
-  { id: uuid(), content: "Second task", date: new Date().toLocaleDateString("en-US") },
-  { id: uuid(), content: "Third task", date: new Date().toLocaleDateString("en-US") },
+export var itemsRequested = [
   { id: uuid(), content: "Fourth task", date: new Date().toLocaleDateString("en-US") },
   { id: uuid(), content: "Fifth task", date: new Date().toLocaleDateString("en-US") }
 ];
 
+export var itemsToDo = [ 
+  { id: uuid(), content: "Third task", date: new Date().toLocaleDateString("en-US") } 
+];
+
+export var itemsInProgress = [ 
+  { id: uuid(), content: "Second task", date: new Date().toLocaleDateString("en-US") } 
+];
+
+export var itemsDone = [
+  { id: uuid(), content: "First task", date: new Date().toLocaleDateString("en-US") } 
+];
+
+
 const columnsFromBackend = {
   [uuid()]: {
     name: "Requested",
-    items: itemsFromBackend
+    items: itemsRequested
   },
   [uuid()]: {
     name: "To do",
-    items: []
+    items: itemsToDo
   },
   [uuid()]: {
     name: "In Progress",
-    items: []
+    items: itemsInProgress
   },
   [uuid()]: {
     name: "Done",
-    items: []
+    items: itemsDone
   }
 };
+
+
 
 const onDragEnd = (result, columns, setColumns) => {
   if (!result.destination) return;
@@ -69,15 +81,14 @@ const onDragEnd = (result, columns, setColumns) => {
   }
 };
 
-function KanbanBoard() {
+export function KanbanBoard() {
 
   //basic http GET request to root at backend
   Axios.get('http://localhost:5001')
   .then(response=>{console.log(response.data)})
   .catch(error=>{console.log(error)});
- 
-
   const [columns, setColumns] = useState(columnsFromBackend);
+
   return (
     <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
       <DragDropContext
