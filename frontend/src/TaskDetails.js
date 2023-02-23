@@ -56,9 +56,6 @@ export function TaskDetails(props) {
         onClose={props.close}
         aria-labelledby="customized-dialog-title"
         open={props.open}
-        style={{
-          opacity:0.7,
-        }}
         maxWidth='lg'
       >
         <BootstrapDialogTitle 

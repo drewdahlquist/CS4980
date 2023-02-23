@@ -179,12 +179,13 @@ function KanbanBoard() {
                   }}
                 </Droppable>
               </div>
-              <TaskDetails content={content} date={date} open={open} close={handleClose}/>
             </div>
           );
         })}
       </DragDropContext>
+      <TaskDetails content={content} date={date} open={open} close={handleClose}/>
     </div>
+    
   );
 }
 
