@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { v4 as uuid } from 'uuid';
-import Axios from 'axios'
+import axios from 'axios'
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
@@ -13,6 +13,9 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
+import { useEffect } from 'react';
+
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -118,22 +121,34 @@ const onDragEnd = (result, columns, setColumns) => {
 
 function KanbanBoard() {
 
-  const [open, setOpen] = useState(false);
+  const [content,setContent] = useState(null)
+  const [date,setDate] = useState(null);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const [open, setOpen] = useState(false);
+  const [columns, setColumns] = useState(columnsFromBackend);
+
+  const handleClickOpen = (content,date) => {
+    setContent(content);
+    setDate(date);
+    setOpen(true)
+    console.log(content+date);
   };
   const handleClose = () => {
     setOpen(false);
   };
+  
+  useEffect(() => {
+      axios.get('http://localhost:5001').then((response) => {
+        console.log(response.data);
+      }, (error) => {
+        console.log(error);
+      });
+
+  }, []);
 
   //basic http GET request to root at backend
-  Axios.get('http://localhost:5001')
-  .then(response=>{console.log(response.data)})
-  .catch(error=>{console.log(error)});
- 
 
-  const [columns, setColumns] = useState(columnsFromBackend);
+ 
   return (
     <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
       <DragDropContext
@@ -193,7 +208,7 @@ function KanbanBoard() {
                                       borderRadius:"15px",
                                       ...provided.draggableProps.style
                                     }}
-                                    onClick={handleClickOpen}
+                                    onClick={(event)=>handleClickOpen(item.content,item.date)}
                                   >
                               
                                     <div>{item.content}</div>
@@ -217,17 +232,27 @@ function KanbanBoard() {
                 aria-labelledby="customized-dialog-title"
                 open={open}
                 style={{
-                  opacity:0.7
+                  opacity:0.7,
                 }}
+                maxWidth='lg'
               >
-                <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
-                  Modal title
+                <BootstrapDialogTitle 
+                id="customized-dialog-title" 
+                onClose={handleClose}
+                style={{
+                  textAlign:'center'
+                }}
+                >
+                  {content}
                 </BootstrapDialogTitle>
-                <DialogContent dividers>
+                <DialogContent dividers
+                style={{
+                  width:'500px',
+                  textAlign:'center'
+                }
+                }>
                   <Typography gutterBottom>
-                    Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-                    dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-                    consectetur ac, vestibulum at eros.
+                    {date}
                   </Typography>
                 </DialogContent>
                 <DialogActions>
