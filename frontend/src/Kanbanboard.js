@@ -3,56 +3,9 @@ import React, { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { v4 as uuid } from 'uuid';
 import axios from 'axios'
-import PropTypes from 'prop-types';
-import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import Typography from '@mui/material/Typography';
 import { useEffect } from 'react';
+import {TaskDetails } from './TaskDetails';
 
-
-
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiDialogContent-root': {
-    padding: theme.spacing(2),
-  },
-  '& .MuiDialogActions-root': {
-    padding: theme.spacing(1),
-  },
-}));
-
-function BootstrapDialogTitle(props) {
-  const { children, onClose, ...other } = props;
-
-  return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-      {children}
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: 'absolute',
-            right: 8,
-            top: 8,
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </DialogTitle>
-  );
-}
-
-BootstrapDialogTitle.propTypes = {
-  children: PropTypes.node,
-  onClose: PropTypes.func.isRequired,
-};
 
 
 export var itemsFromBackend = [
@@ -131,12 +84,12 @@ function KanbanBoard() {
     setContent(content);
     setDate(date);
     setOpen(true)
-    console.log(content+date);
   };
+
   const handleClose = () => {
-    setOpen(false);
+      setOpen(false);
   };
-  
+
   useEffect(() => {
       axios.get('http://localhost:5001').then((response) => {
         console.log(response.data);
@@ -146,7 +99,6 @@ function KanbanBoard() {
 
   }, []);
 
-  //basic http GET request to root at backend
 
  
   return (
@@ -227,45 +179,13 @@ function KanbanBoard() {
                   }}
                 </Droppable>
               </div>
-              <BootstrapDialog
-                onClose={handleClose}
-                aria-labelledby="customized-dialog-title"
-                open={open}
-                style={{
-                  opacity:0.7,
-                }}
-                maxWidth='lg'
-              >
-                <BootstrapDialogTitle 
-                id="customized-dialog-title" 
-                onClose={handleClose}
-                style={{
-                  textAlign:'center'
-                }}
-                >
-                  {content}
-                </BootstrapDialogTitle>
-                <DialogContent dividers
-                style={{
-                  width:'500px',
-                  textAlign:'center'
-                }
-                }>
-                  <Typography gutterBottom>
-                    {date}
-                  </Typography>
-                </DialogContent>
-                <DialogActions>
-                  <Button autoFocus onClick={handleClose}>
-                    close
-                  </Button>
-                </DialogActions>
-              </BootstrapDialog>
             </div>
           );
         })}
       </DragDropContext>
+      <TaskDetails content={content} date={date} open={open} close={handleClose}/>
     </div>
+    
   );
 }
 
