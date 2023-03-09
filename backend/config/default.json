@@ -1,0 +1,8 @@
+{
+  "API_PORT": "4980",
+  "RDS_HOSTNAME": "localhost",
+  "RDS_PORT": "5432",
+  "RDS_DB_NAME": "postgres",
+  "RDS_USERNAME": "postgres",
+  "RDS_PASSWORD": "password"
+}

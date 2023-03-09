@@ -1,8 +1,8 @@
-require("dotenv").config();
+const config = require("config");
 
 const express = require("express");
 const cors = require("cors");
-const port = process.env.API_PORT || 5001;
+const port = config.get("API_PORT") || 4980;
 const userRouter = require("./routes/user.js");
 const taskRouter = require("./routes/task.js");
 
