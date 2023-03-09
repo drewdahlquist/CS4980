@@ -23,7 +23,7 @@ router
   // list users
   .get(function (req, res) {
     const text = "SELECT * FROM users";
-    
+
     pool.query(text, (err, result) => {
       if (err) {
         res.status(400).send(err);
