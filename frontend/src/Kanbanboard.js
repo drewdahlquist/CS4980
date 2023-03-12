@@ -8,9 +8,9 @@ import { getTasks } from './user-services';
 
 
 export var itemsFromBackend = [
-  { id: 1, description: "First task", date: new Date().toLocaleDateString("en-US") },
-  { id: 2, description: "Second task", date: new Date().toLocaleDateString("en-US") },
-  { id: 3, description: "Third task", date: new Date().toLocaleDateString("en-US") },
+  { id: 1, description: "First task", due_date: new Date().toLocaleDateString("en-US") },
+  { id: 2, description: "Second task", due_date: new Date().toLocaleDateString("en-US") },
+  { id: 3, description: "Third task", due_date: new Date().toLocaleDateString("en-US") },
 
 ];
 
@@ -57,29 +57,10 @@ function KanbanBoard() {
   const [open, setOpen] = useState(false);
 
   const [description,setDescription] = useState(null)
-  const [date,setDate] = useState(null);
+  const [due_date,setDate] = useState(null);
 
   const [tasks, setTasks] = useState([])
-  const [columns, setColumns] = useState(
-    {
-      0: {
-        name: "Requested",
-        items: []
-      },
-      1: {
-        name: "To do",
-        items: []
-      },
-      2: {
-        name: "In Progress",
-        items: []
-      },
-      3: {
-        name: "Done",
-        items: []
-      }
-    }
-  );
+  const [columns, setColumns] = useState({});
 
   const handleClickOpen = (description,date) => {
     setDescription(description);
@@ -99,19 +80,19 @@ function KanbanBoard() {
     }else{
 
       setColumns({
-        0: {
+        [uuid()]: {
           name: "Requested",
           items: userTasks.data
         },
-        1: {
+        [uuid()]: {
           name: "To do",
           items: []
         },
-        2: {
+        [uuid()]: {
           name: "In Progress",
           items: []
         },
-        3: {
+        [uuid()]: {
           name: "Done",
           items: []
         }
@@ -161,8 +142,8 @@ function KanbanBoard() {
                         {column.items.map((item, index) => {
                           return (
                             <Draggable
-                              key={item.id}
-                              draggableId={item.id}
+                              key={(item.id).toString()}
+                              draggableId={(item.id).toString()}
                               index={index}
                               
                             >
@@ -185,11 +166,11 @@ function KanbanBoard() {
                                       borderRadius:"15px",
                                       ...provided.draggableProps.style
                                     }}
-                                    onClick={(event)=>handleClickOpen(item.description,item.date)}
+                                    onClick={(event)=>handleClickOpen(item.description,item.due_date)}
                                   >
                               
                                     <div>{item.description}</div>
-                                    <div>Due: {item.date}</div>
+                                    <div>Due: {item.due_date}</div>
                                     
                                   </div>
 
@@ -208,7 +189,7 @@ function KanbanBoard() {
           );
         })}
       </DragDropContext>
-      <TaskDetails content={description} date={date} open={open} close={handleClose}/>
+      <TaskDetails content={description} date={due_date} open={open} close={handleClose}/>
     </div>
     
   );
