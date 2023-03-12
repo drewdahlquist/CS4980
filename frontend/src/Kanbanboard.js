@@ -2,38 +2,19 @@
 import React, { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { v4 as uuid } from 'uuid';
-import axios from 'axios'
 import { useEffect } from 'react';
 import {TaskDetails } from './TaskDetails';
-
+import { getTasks } from './user-services';
 
 
 export var itemsFromBackend = [
-  { id: uuid(), content: "First task", date: new Date().toLocaleDateString("en-US") },
-  { id: uuid(), content: "Second task", date: new Date().toLocaleDateString("en-US") },
-  { id: uuid(), content: "Third task", date: new Date().toLocaleDateString("en-US") },
-  { id: uuid(), content: "Fourth task", date: new Date().toLocaleDateString("en-US") },
-  { id: uuid(), content: "Fifth task", date: new Date().toLocaleDateString("en-US") }
+  { id: 1, description: "First task", date: new Date().toLocaleDateString("en-US") },
+  { id: 2, description: "Second task", date: new Date().toLocaleDateString("en-US") },
+  { id: 3, description: "Third task", date: new Date().toLocaleDateString("en-US") },
+
 ];
 
-const columnsFromBackend = {
-  [uuid()]: {
-    name: "Requested",
-    items: itemsFromBackend
-  },
-  [uuid()]: {
-    name: "To do",
-    items: []
-  },
-  [uuid()]: {
-    name: "In Progress",
-    items: []
-  },
-  [uuid()]: {
-    name: "Done",
-    items: []
-  }
-};
+
 
 const onDragEnd = (result, columns, setColumns) => {
   if (!result.destination) return;
@@ -73,15 +54,35 @@ const onDragEnd = (result, columns, setColumns) => {
 };
 
 function KanbanBoard() {
+  const [open, setOpen] = useState(false);
 
-  const [content,setContent] = useState(null)
+  const [description,setDescription] = useState(null)
   const [date,setDate] = useState(null);
 
-  const [open, setOpen] = useState(false);
-  const [columns, setColumns] = useState(columnsFromBackend);
+  const [tasks, setTasks] = useState([])
+  const [columns, setColumns] = useState(
+    {
+      0: {
+        name: "Requested",
+        items: []
+      },
+      1: {
+        name: "To do",
+        items: []
+      },
+      2: {
+        name: "In Progress",
+        items: []
+      },
+      3: {
+        name: "Done",
+        items: []
+      }
+    }
+  );
 
-  const handleClickOpen = (content,date) => {
-    setContent(content);
+  const handleClickOpen = (description,date) => {
+    setDescription(description);
     setDate(date);
     setOpen(true)
   };
@@ -90,13 +91,37 @@ function KanbanBoard() {
       setOpen(false);
   };
 
-  useEffect(() => {
-      axios.get('http://localhost:5001').then((response) => {
-        console.log(response.data);
-      }, (error) => {
-        console.log(error);
-      });
+  const getUserTasks = async()=>{
+    console.log(columns)
+    const userTasks =  await getTasks()
+    if(userTasks.error){
+      console.log("Error fetching tasks")
+    }else{
 
+      setColumns({
+        0: {
+          name: "Requested",
+          items: userTasks.data
+        },
+        1: {
+          name: "To do",
+          items: []
+        },
+        2: {
+          name: "In Progress",
+          items: []
+        },
+        3: {
+          name: "Done",
+          items: []
+        }
+      })
+      console.log(userTasks.data)
+    }
+  };
+
+  useEffect(() => {
+    getUserTasks()
   }, []);
 
 
@@ -160,10 +185,10 @@ function KanbanBoard() {
                                       borderRadius:"15px",
                                       ...provided.draggableProps.style
                                     }}
-                                    onClick={(event)=>handleClickOpen(item.content,item.date)}
+                                    onClick={(event)=>handleClickOpen(item.description,item.date)}
                                   >
                               
-                                    <div>{item.content}</div>
+                                    <div>{item.description}</div>
                                     <div>Due: {item.date}</div>
                                     
                                   </div>
@@ -183,7 +208,7 @@ function KanbanBoard() {
           );
         })}
       </DragDropContext>
-      <TaskDetails content={content} date={date} open={open} close={handleClose}/>
+      <TaskDetails content={description} date={date} open={open} close={handleClose}/>
     </div>
     
   );
